@@ -1,0 +1,12 @@
+version: "3.4"
+
+services:
+  db:
+    build: ./sqlserver
+    container_name: "fibonacci_db"
+    image: "mcr.microsoft.com/mssql/server"
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "Your_password123"
+      ACCEPT_EULA: "Y"

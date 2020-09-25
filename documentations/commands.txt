@@ -1,0 +1,188 @@
+
+
+1 ----------------- Hello world
+
+dotnet new Console -o Console
+dotnet publish Console.csproj  -r win-x64 --self-contained=true /p:PublishSingleFile=true /p:IncludeNativeLibrariesInSingleFile=true
+ 
+#########
+FROM mcr.microsoft.com/dotnet/core/sdk:5.0 AS build
+WORKDIR /src
+COPY . .
+RUN dotnet publish "Console.csproj" -c Release -r linux-x64 /p:PublishSingleFile=true  -o /publish
+
+FROM mcr.microsoft.com/dotnet/core/runtime-deps:5.0 AS final
+WORKDIR /app
+COPY --from=build /publish .
+ENTRYPOINT ["/app/Console"]
+#########
+
+docker build . -t demo
+docker run --rm demo
+
+
+2 ----------------- Fibonacci C#
+
+######### C# Fibonacci
+private static int Fib(int i) { 
+   if(i<=2) return 1;
+   return Fib(i-2) + Fib(i-1);
+}
+#########
+
+######### C# pattern matching
+int Fib(int i) => 
+            i switch
+            {
+                int when i<=2 => 1,
+                _ => Fib(i-2) + Fib(i-1)
+            };
+#########
+
+dotnet new Console -o ConsoleFSharp -lang F#
+
+######### F#
+let rec Fib  n =
+    match n with
+    | 1 | 2 -> 1
+    | n -> Fib(n-1) + Fib(n-2)
+
+let x = Fib(24)
+printf "%i" x
+#########
+
+3 ----------------- Add Task
+
+########## add task
+
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Threading.Tasks;
+
+    class Program
+    {
+        private static int Fib(int i) { 
+            if(i<=2) return 1;
+            return Fib(i-2) + Fib(i-1);
+        }
+        
+        static void Main(string[] args)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var tasks = new List<Task<int>>(); 
+            foreach (var arg in args)
+            {
+                var task = Task.Run<int>(() =>
+                {
+                    var result = Fib(Convert.ToInt32(arg));
+                    Console.WriteLine($"Time: {stopwatch.Elapsed.TotalSeconds}");
+                    return result;
+                });
+                tasks.Add(task);
+            }
+            
+            foreach (var task in tasks)
+            {
+                Console.WriteLine(task.Result);
+            }
+            stopwatch.Stop();
+            
+            Console.WriteLine($"Total Time: {stopwatch.Elapsed.TotalSeconds}");
+        }
+    }
+##############
+
+cd..
+mkdir Fibonacci
+mkdir Fibonacci\src
+move .\Console .\Fibonacci\src
+cd Fibonacci
+
+dotnet new sln
+dotnet sln Fibonacci.sln add .\src\Console\Console.csproj
+type Fibonacci.sln
+
+dotnet new classlib –o .\src\Fibonacci
+
+dotnet add "./src/Console/Console.csproj" reference "./src/Fibonacci/Fibonacci.csproj"
+
+dotnet new web -o .\src\Web
+dotnet sln Fibonacci.sln add .\src\Web\Web.csproj
+dotnet add "./src/Web/Web.csproj" reference "./src/Fibonacci/Fibonacci.csproj"
+
+#############
+using System.Text.Json;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        CreateHostBuilder(args).Build().Run();
+    }
+
+    public static IHostBuilder CreateHostBuilder(string[] args)
+    {
+        return Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(webBuilder =>
+        {
+            webBuilder.Configure(app =>
+            {
+                app.UseRouting();
+                app.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapGet("/Fibonacci",
+                        async context =>
+                        {
+                            await context.Response.WriteAsync(
+                                JsonSerializer.Serialize(Fibonacci.Fibonacci.Compute(new []{"44", "43"})));
+                        });
+                });
+            });
+        });
+    }
+}
+############
+
+###########
+FROM mcr.microsoft.com/dotnet/core/sdk:5.0 AS build
+WORKDIR /src
+COPY . .
+RUN dotnet publish "Web.csproj" -c Release -r linux-x64 /p:PublishSingleFile=true  -o /publish
+FROM mcr.microsoft.com/dotnet/core/runtime-deps:5.0 AS final
+WORKDIR /app
+COPY --from=build /publish .
+ENTRYPOINT ["/app/Web"]
+###########
+
+docker build . –t web
+docker run -p 5003:80  --rm web
+
+
+-----------------------------------------
+
+###########
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+
+dotnet tool install --global dotnet-ef 
+dotnet add package Microsoft.EntityFrameworkCore.Design 
+
+dotnet ef dbcontext scaffold "Data Source=localhost,1433;Initial Catalog=FibonacciData;Integrated Security=False;User ID=sa;Password=Your_password123;MultipleActiveResultSets=True" Microsoft.EntityFrameworkCore.SqlServer
+#############
+
+public DateTime FibCreatedTimestamp { get; set; }
+###########
+dotnet ef migrations add AddFibFibonacciCreatedTimestamp
+dotnet ef database update
+############
+
+https://github.com/dotnet/interactive
+
+cd C:\github\interactive
+docker build . --tag dotnet-interactive:1.0
+docker run --rm -it -p 8888:8888 -p 1000-1200:1000-1200  --name dotnet-interactive-image dotnet-interactive:1.0
+
