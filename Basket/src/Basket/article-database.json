@@ -1,0 +1,30 @@
+﻿[
+  {
+    "Id": "1",
+    "Label": "Banana",
+    "Category": "food",
+    "Price": 1,
+    "Stock": 35
+  },
+  {
+    "Id": "2",
+    "Label": "Fridge electrolux",
+    "Category": "electronic",
+    "Price": 500,
+    "Stock": 20
+  },
+  {
+    "Id": "3",
+    "Label": "Chair",
+    "Category": "desktop",
+    "Price": 49,
+    "Stock": 68
+  },
+  {
+    "Id": "4",
+    "Label": "Grumly",
+    "Category": "toy",
+    "Price": 39,
+    "Stock": 55
+  }
+]
