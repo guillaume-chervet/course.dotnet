@@ -14,7 +14,7 @@ namespace Basket.Tests
         
         public class BasketTest
         {
-            public List<BasketLineArticle> BasketLineArticles { get; set; }
+            public IList<BasketLineArticle> BasketLineArticles { get; set; }
             public int ExpectedPrice { get; set; }
         }
         
