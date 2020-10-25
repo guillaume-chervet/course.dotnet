@@ -14,4 +14,9 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Imperative" />
+      <Folder Include="OrientedObject" />
+    </ItemGroup>
+
 </Project>

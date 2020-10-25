@@ -20,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\BasketCore\BasketCore.csproj" />
       <ProjectReference Include="..\..\src\Basket\Basket.csproj" />
     </ItemGroup>
 
