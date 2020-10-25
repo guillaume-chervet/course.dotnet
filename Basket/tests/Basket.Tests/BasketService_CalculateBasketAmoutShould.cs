@@ -68,7 +68,7 @@ namespace Basket.Tests
                 var assemblyDirectory = Path.GetDirectoryName(path);
                 var jsonPath = Path.Combine(assemblyDirectory, "article-database.json");
                 var json = await File.ReadAllTextAsync(jsonPath);
-                IList<ArticleDatabase> articleDatabases =
+                var articleDatabases =
                     JsonConvert.DeserializeObject<List<ArticleDatabase>>(json);
                 var article = articleDatabases.First(articleDatabase => articleDatabase.Id == id);
 
