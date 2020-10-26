@@ -1,18 +1,15 @@
-USE [master]
-
-CREATE DATABASE FibonacciData
+USE [master]
+CREATE DATABASE FibonacciData
 GO
 
-USE FibonacciData
-GO
-CREATE SCHEMA sch_fib AUTHORIZATION [dbo];
+USE FibonacciData
 GO
 
-if not exists (select * from sysobjects where name='Fibonacci' and xtype='U')
-BEGIN
-CREATE TABLE [sch_fib].[Fibonacci](
-	[Id] uniqueidentifier NOT NULL DEFAULT newid(),
-	[Input] [int] NOT NULL,
-	[Output] [bigint] NOT NULL,
- CONSTRAINT [PK_Fibonacci] PRIMARY KEY CLUSTERED ([FIB_Id]))
-END
+CREATE SCHEMA sch_fib AUTHORIZATION [dbo];
+GO
+
+CREATE TABLE [sch_fib].[T_Fibonacci](
+    [FIB_Id] uniqueidentifier NOT NULL DEFAULT newid(),
+    [FIB_Input] [int] NOT NULL,
+    [FIB_Output] [bigint] NOT NULL,
+ CONSTRAINT [PK_Fibonacci] PRIMARY KEY CLUSTERED ([FIB_Id]))
