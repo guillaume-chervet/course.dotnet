@@ -4,46 +4,68 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Basket;
 using Newtonsoft.Json;
 
-namespace Basket.Imperative
+namespace BasketCore.Declarative
 {
     public class BasketOperation
     {
-        public static async Task<double> GetAmountTotal(IList<BasketLineArticle> basketLineArticles)
+
+        public static Func<string, Task<ArticleDatabase>> RegleMetier(
+            Func<string, Task<ArticleDatabase>> getArticleDatabaseAsync)
         {
-            var amountTotal = 0D;
-            foreach (var basketLineArticle in basketLineArticles)
+            return Database;
+            async Task<ArticleDatabase> Database(string id)
             {
-                var id = basketLineArticle.Id;
-#if DEBUG
-                var article = await GetArticleDatabaseMockAsync(id);
-#endif
-#if RELEASE
-                var article = await GetArticleDatabaseAsync(id);
-#endif
-                
-                var amount = 0;
-                switch (article.Category)
+                try
                 {
-                    case "food":
-                        amount += article.Price * 100 + article.Price * 12;
-                        break;
-                    case "electronic":
-                        amount += article.Price * 100 + article.Price * 20 + 4;
-                        break;
-                    case "desktop":
-                        amount += article.Price * 100 + article.Price * 20;
-                        break;
+                    return await getArticleDatabaseAsync(id);
+                }
+                catch(Exception ex)
+                {
+                    // TODO logger
+                    return new ArticleDatabase()
+                    {
+                        Category = "food",
+                        Price = 20
+                    };
+                }
+            }
+        }
+        
+        public static Func<IList<BasketLineArticle>, Task<double>> GetAmountTotal(Func<string, Task<ArticleDatabase>> getArticleDatabaseAsync)
+        {
+            return Calculate;
+
+            async Task<double> Calculate(IList<BasketLineArticle> basketLineArticles) {
+                var amountTotal = 0D;
+                foreach (var basketLineArticle in basketLineArticles)
+                {
+                    var id = basketLineArticle.Id;
+                    var article = await getArticleDatabaseAsync(id);
+                    var amount = 0;
+                    switch (article.Category)
+                    {
+                        case "food":
+                            amount += article.Price * 100 + article.Price * 12;
+                            break;
+                        case "electronic":
+                            amount += article.Price * 100 + article.Price * 20 + 4;
+                            break;
+                        case "desktop":
+                            amount += article.Price * 100 + article.Price * 20;
+                            break;
+                    }
+
+                    amountTotal += amount * basketLineArticle.Number;
                 }
 
-                amountTotal += amount * basketLineArticle.Number;
+                return amountTotal;
             }
-
-            return amountTotal;
         }
 
-        private static async Task<ArticleDatabase> GetArticleDatabaseAsync(string id)
+        public static async Task<ArticleDatabase> GetArticleDatabaseAsync(string id)
         {
             var codeBase = Assembly.GetExecutingAssembly().CodeBase;
             var uri = new UriBuilder(codeBase);

@@ -15,6 +15,7 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
+		Guillaume|Any CPU = Guillaume|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +33,8 @@ Global
 		{0AB8B57E-B3AC-405C-9586-FFAD7DFC1276}.Release|x64.Build.0 = Release|Any CPU
 		{0AB8B57E-B3AC-405C-9586-FFAD7DFC1276}.Release|x86.ActiveCfg = Release|Any CPU
 		{0AB8B57E-B3AC-405C-9586-FFAD7DFC1276}.Release|x86.Build.0 = Release|Any CPU
+		{0AB8B57E-B3AC-405C-9586-FFAD7DFC1276}.Guillaume|Any CPU.ActiveCfg = Guillaume|Any CPU
+		{0AB8B57E-B3AC-405C-9586-FFAD7DFC1276}.Guillaume|Any CPU.Build.0 = Guillaume|Any CPU
 		{10A13752-0404-41E0-9444-65C7F9E4C930}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{10A13752-0404-41E0-9444-65C7F9E4C930}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10A13752-0404-41E0-9444-65C7F9E4C930}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -44,5 +47,7 @@ Global
 		{10A13752-0404-41E0-9444-65C7F9E4C930}.Release|x64.Build.0 = Release|Any CPU
 		{10A13752-0404-41E0-9444-65C7F9E4C930}.Release|x86.ActiveCfg = Release|Any CPU
 		{10A13752-0404-41E0-9444-65C7F9E4C930}.Release|x86.Build.0 = Release|Any CPU
+		{10A13752-0404-41E0-9444-65C7F9E4C930}.Guillaume|Any CPU.ActiveCfg = Guillaume|Any CPU
+		{10A13752-0404-41E0-9444-65C7F9E4C930}.Guillaume|Any CPU.Build.0 = Guillaume|Any CPU
 	EndGlobalSection
 EndGlobal

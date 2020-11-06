@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,13 +9,13 @@ using Newtonsoft.Json;
 
 namespace Basket.OrientedObject
 {
-    public class ArticleRepository
+    public class ArticleRepository : IArticleRepository
     {
         public ArticleRepository()
         {
         }
 
-        private async Task<ArticleDatabase> GetArticleDatabaseAsync(string id)
+        public async Task<ArticleDatabase> GetArticleDatabaseAsync(string id)
         {
             var codeBase = Assembly.GetExecutingAssembly().CodeBase;
             var uri = new UriBuilder(codeBase);
